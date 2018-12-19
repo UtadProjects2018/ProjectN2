@@ -49,16 +49,23 @@ const char *GetHighestByteElement(const int *pTable)
     return pBytes;
 }
 
-const char *ReverseCharacters(const char *characters)
+void ReverseCharacters(char *&characters)
 {
-    int length = static_cast<int>(strlen(characters));
+    const size_t length = strlen(characters);
     char *reversedCharacter = new char[length];
     
-    for (int i = length; i > 0; i--)
+    for (size_t i = length; i > 0; i--)
     {
         reversedCharacter[length - i] = characters[i - 1];
     }
-    return reversedCharacter;
+
+    //Reset Pointer
+    characters = nullptr;
+    delete [] characters;
+    characters = new char[length];
+    
+    strncpy(characters, reversedCharacter, length);
+    delete [] reversedCharacter;
 }
 
 int main(int argc, const char * argv[])
@@ -75,8 +82,10 @@ int main(int argc, const char * argv[])
     printf("%p\n", GetHighestByteElement(table));
     
     //4.
-    const char characters[] = "HOLA";
-    printf("%s\n", ReverseCharacters(characters));
+    char *characters = "HOLA";
+    ReverseCharacters(characters);
+    printf("%s\n", characters);
+    delete [] characters;
     
     return 0;
 }
